@@ -2,7 +2,7 @@
 
 Knihovna obsahuje vzorce ze skript **Životnost a spolehlivost** (Kořínek, Tošková, Fusek; VŠB-TUO, 2025) pro předmět Únava materiálu. Každá funkce má v docstringu číslo rovnice ze skript, takže se dá snadno dohledat, odkud vzorec pochází.
 
-Verze: 0.1.0 · Python ≥ 3.8 · bez závislostí (jen standardní `math`)
+Verze: 0.1.0 · Python ≥ 3.9 · bez závislostí (jen standardní `math`)
 
 ---
 

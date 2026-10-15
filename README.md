@@ -5,11 +5,11 @@ Vzorce z předmětu Únava materiálu podle skript *Životnost a spolehlivost* (
 
 ## Instalace
 
-Ve složce s `pyproject.toml`:
+```
+pip install unava
+```
 
-```
-pip install .
-```
+Případně přímo z GitHubu: `pip install git+https://github.com/Fradek/Unava.git`
 
 Pro vývoj (změny se projeví bez přeinstalování):
 

@@ -7,8 +7,20 @@ name = "unava"
 version = "0.1.0"
 description = "Vzorce z předmětu Únava materiálu (skripta Životnost a spolehlivost, VŠB-TUO)"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = []
+authors = [{ name = "Fradek" }]
+keywords = ["únava materiálu", "fatigue", "rainflow", "S-N", "E-N", "lomová mechanika"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Natural Language :: Czech",
+    "Topic :: Scientific/Engineering",
+    "Intended Audience :: Education",
+]
+
+[project.urls]
+Repository = "https://github.com/Fradek/Unava"
+Documentation = "https://github.com/Fradek/Unava/blob/main/DOKUMENTACE.md"
 
 [project.optional-dependencies]
 test = ["pytest"]
