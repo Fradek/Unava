@@ -4,12 +4,12 @@ import pytest
 
 import unava
 
-HISTORIE = [170, -270, 390, 130, 260, -160, 130, -420, 180, 60, 320, -90]
+HISTORIE = [150, -230, 360, 110, 240, -140, 100, -380, 160, 50, 290, -70]
 NAZVY = list("ABCDEFGHIJKL")
 
 E = 206000
-SIGMA_F, B, EPS_F, C = 742.3, -0.0658, 0.0603, -0.3085
-K_CYKL, N_CYKL = 1370, 0.216
+SIGMA_F, B, EPS_F, C = 800, -0.07, 0.3, -0.55
+K_CYKL, N_CYKL = 932, 0.127
 
 
 def test_zakladni_pojmy():
@@ -22,9 +22,9 @@ def test_zakladni_pojmy():
 
 
 def test_basquin_inverze():
-    Nf = unava.basquin_cykly(400, 1020, -0.08432)
-    assert unava.basquin_napeti(1020, -0.08432, Nf) == pytest.approx(400)
-    assert unava.basquin_cykly(0, 1020, -0.08432) == math.inf
+    Nf = unava.basquin_cykly(400, 900, -0.09)
+    assert unava.basquin_napeti(900, -0.09, Nf) == pytest.approx(400)
+    assert unava.basquin_cykly(0, 900, -0.09) == math.inf
 
 
 def test_basquin_regrese():
@@ -64,12 +64,12 @@ def test_extremy_plato():
     assert unava.extremy([0, 2, 5, 3, 1, 4])[0] == [0, 5, 1, 4]
 
 
-def test_stekajici_dest_skripta():
+def test_stekajici_dest_blok():
     cykly = unava.stekajici_dest(HISTORIE, NAZVY)
     nalezene = {(od, do): (sh - sd, (sh + sd) / 2) for od, do, sh, sd, _ in cykly}
     assert nalezene == {
-        ("I", "J"): (120, 120), ("L", "A"): (260, 40), ("K", "B"): (590, 25),
-        ("D", "E"): (130, 195), ("F", "G"): (290, -15), ("H", "C"): (810, -15),
+        ("I", "J"): (110, 105), ("L", "A"): (220, 40), ("K", "B"): (520, 30),
+        ("D", "E"): (130, 175), ("F", "G"): (240, -20), ("H", "C"): (740, -10),
     }
     assert all(p == 1.0 for *_, p in cykly)
 
@@ -84,20 +84,20 @@ def test_stekajici_dest_kratka_historie():
     assert unava.stekajici_dest([5, 5, 5]) == []
 
 
-def test_zivotnost_bloku_skripta():
-    B_bloku, tabulka = unava.zivotnost_bloku(HISTORIE, 1020, -0.08432)
-    assert round(B_bloku) == 32787
+def test_zivotnost_bloku():
+    B_bloku, tabulka = unava.zivotnost_bloku(HISTORIE, 900, -0.09)
+    assert round(B_bloku) == 10658
     assert len(tabulka) == 6
 
 
 def test_zivotnost_bloku_jeden_pruchod():
-    B_bloku, _ = unava.zivotnost_bloku(HISTORIE, 1020, -0.08432, opakovany_blok=False)
-    assert round(B_bloku) == 46975
+    B_bloku, _ = unava.zivotnost_bloku(HISTORIE, 900, -0.09, opakovany_blok=False)
+    assert round(B_bloku) == 15395
 
 
 def test_reverzni_amplituda_mez():
     with pytest.raises(ValueError):
-        unava.reverzni_amplituda(100, 1020, 1020)
+        unava.reverzni_amplituda(100, 900, 900)
 
 
 def test_mcb_inverze():
@@ -109,7 +109,7 @@ def test_mcb_inverze():
 def test_mcb_mimo_rozsah():
     assert unava.mcb_cykly(1e-6, SIGMA_F, B, EPS_F, C, E) == math.inf
     with pytest.raises(ValueError):
-        unava.mcb_cykly(5, SIGMA_F, B, EPS_F, C, E)
+        unava.mcb_cykly(100, SIGMA_F, B, EPS_F, C, E)
 
 
 def test_tranzitni_bod():

@@ -2,7 +2,7 @@
 
 Knihovna obsahuje vzorce ze skript **Životnost a spolehlivost** (Kořínek, Tošková, Fusek; VŠB-TUO, 2025) pro předmět Únava materiálu. Každá funkce má v docstringu číslo rovnice ze skript, takže se dá snadno dohledat, odkud vzorec pochází.
 
-Verze: 0.1.0 · Python ≥ 3.9 · bez závislostí (jen standardní `math`)
+Verze: 0.1.1 · Python ≥ 3.9 · bez závislostí (jen standardní `math`)
 
 ---
 
@@ -52,9 +52,9 @@ print(unava.__version__)
 ```python
 import unava
 
-napeti = [170, -270, 390, 130, 260, -160, 130, -420, 180, 60, 320, -90]
-B, _ = unava.zivotnost_bloku(napeti, sigma_f=1020, b=-0.08432)
-print(f"B = {B:.0f}")          # B = 32787
+napeti = [150, -230, 360, 110, 240, -140, 100, -380, 160, 50, 290, -70]
+B, _ = unava.zivotnost_bloku(napeti, sigma_f=900, b=-0.09)
+print(f"B = {B:.0f}")          # B = 10658
 ```
 
 Všechny funkce lze volat přímo z `unava`, nebo po kapitolách:
@@ -62,7 +62,7 @@ Všechny funkce lze volat přímo z `unava`, nebo po kapitolách:
 ```python
 from unava import kumulace, en
 kumulace.palmgren_miner([1, 2], [1e5, 1e6])
-en.mcb_cykly(0.005, 742.3, -0.0658, 0.0603, -0.3085, 206000)
+en.mcb_cykly(0.005, 800, -0.07, 0.3, -0.55, 206000)
 ```
 
 ---
@@ -73,7 +73,7 @@ en.mcb_cykly(0.005, 742.3, -0.0658, 0.0603, -0.3085, 206000)
 
 **Cykly vs. půlcykly.** Funkce s `cykly` v názvu vrací vždy **počet cyklů N_f**. Převod z počtu půlcyklů 2N_f dělají interně. Jedinou výjimkou je `tranzitni_pulcykly`, která vrací 2N_T.
 
-**Exponenty.** `b` a `c` se zadávají záporně, tak jak jsou ve skriptech (např. `b = -0.08432`).
+**Exponenty.** `b` a `c` se zadávají záporně, tak jak jsou ve skriptech (např. `b = -0.09`).
 
 **Úhly.** Všechny úhly jsou v **radiánech** (`math.radians(90)`).
 
@@ -306,7 +306,7 @@ Parametr `opakovany_blok`:
 `zivotnost_bloku` vrací B (počet opakování bloku do porušení) a seznam slovníků s klíči `cyklus`, `pocet`, `sigma_a`, `sigma_m`, `sigma_ar`, `Nf`. Celkový počet cyklů do porušení je B × počet cyklů v bloku.
 
 ```python
-B, tab = unava.zivotnost_bloku(napeti, 1020, -0.08432, nazvy=list("ABCDEFGHIJKL"))
+B, tab = unava.zivotnost_bloku(napeti, 900, -0.09, nazvy=list("ABCDEFGHIJKL"))
 celkem_cyklu = B * sum(c["pocet"] for c in tab)
 ```
 
@@ -350,8 +350,8 @@ celkem_cyklu = B * sum(c["pocet"] for c in tab)
 `K` je Kt (rov. 5.15) nebo Kf (rov. 5.16) a `sigma_EL` je nominální elastické napětí. Neuber dává vždy vyšší (konzervativnější) lokální napětí než Glinka. Pro záporné `sigma_EL` (tlak) vrací obě funkce symetrické řešení se záporným σ i ε.
 
 ```python
-sigma, eps = unava.neuber(2.5, 200, 206000, 1370, 0.216)   # σ ≈ 349 MPa
-sigma, eps = unava.glinka(2.5, 200, 206000, 1370, 0.216)   # σ ≈ 326 MPa
+sigma, eps = unava.neuber(2.5, 200, 206000, 932, 0.127)   # σ ≈ 395 MPa
+sigma, eps = unava.glinka(2.5, 200, 206000, 932, 0.127)   # σ ≈ 376 MPa
 ```
 
 ### 8.4 Multiaxiální zatěžování
@@ -496,16 +496,16 @@ Mez kluzu ve smyku podle opraveného vztahu používá i funkce `rp_III`.
 ```python
 import unava
 
-napeti = [170, -270, 390, 130, 260, -160, 130, -420, 180, 60, 320, -90]
-B, tab = unava.zivotnost_bloku(napeti, sigma_f=1020, b=-0.08432,
+napeti = [150, -230, 360, 110, 240, -140, 100, -380, 160, 50, 290, -70]
+B, tab = unava.zivotnost_bloku(napeti, sigma_f=900, b=-0.09,
                                nazvy=list("ABCDEFGHIJKL"))
 print(f"B = {B:.0f} bloků")
 print(f"N = {B * len(tab):.0f} cyklů")
 ```
 
 ```
-B = 32787 bloků
-N = 196723 cyklů
+B = 10658 bloků
+N = 63946 cyklů
 ```
 
 ### Parametry E-N křivky z naměřených dat
@@ -514,9 +514,9 @@ N = 196723 cyklů
 import unava
 
 E = 206000
-eps_a = [0.02433, 0.01752, 0.01349, 0.00989, 0.00699, 0.00488, 0.00395, 0.00293, 0.00265]
-sig_a = [626.9, 563.6, 500.5, 465.5, 423.9, 380.4, 361.8, 335.5, 322.5]
-Nf    = [24, 56, 133, 594, 897, 5700, 8630, 124450, 536512]
+eps_a = [0.03448, 0.01896, 0.01003, 0.00589, 0.00372, 0.0026, 0.00202, 0.00163]
+sig_a = [600.6, 552.1, 501.0, 456.8, 414.5, 375.1, 340.4, 304.2]
+Nf    = [30, 100, 400, 1500, 6000, 25000, 100000, 500000]
 
 sigma_f, b = unava.basquin_regrese(sig_a, Nf)
 eps_pl = [e - s / E for e, s in zip(eps_a, sig_a)]
@@ -534,8 +534,8 @@ print("2NT =", unava.tranzitni_pulcykly(sigma_f, b, eps_f, c, E))
 ```python
 import unava
 
-E, K, n = 206000, 1370, 0.216
-sigma_f, b, eps_f, c = 742.3, -0.0658, 0.0603, -0.3085
+E, K, n = 206000, 932, 0.127
+sigma_f, b, eps_f, c = 800, -0.07, 0.3, -0.55
 
 sigma, eps = unava.neuber(2.5, 200, E, K, n)
 Nf = unava.swt_cykly(sigma, eps, sigma_f, b, eps_f, c, E)
@@ -556,7 +556,7 @@ print(f"N = {N:.3e}")
 ## 13. Testy
 
 Repozitář obsahuje sadu testů ve složce `tests/`. Kontrolují mimo jiné:
-- výsledek úlohy ze skript (B = 32 787),
+- výsledek ukázkové úlohy se stékajícím deštěm,
 - vzorový příklad stékajícího deště z normy ASTM E1049,
 - inverze všech implicitních rovnic,
 - spojitost Haibachovy křivky a Paris-Erdoganova vztahu v okolí m = 2,

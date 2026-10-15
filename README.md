@@ -36,9 +36,9 @@ Všechny funkce jdou volat i přímo z `unava`.
 import unava
 
 B, _ = unava.zivotnost_bloku(
-    [170, -270, 390, 130, 260, -160, 130, -420, 180, 60, 320, -90],
-    sigma_f=1020, b=-0.08432)
-print(f"B = {B:.0f}")   # B = 32787
+    [150, -230, 360, 110, 240, -140, 100, -380, 160, 50, 290, -70],
+    sigma_f=900, b=-0.09)
+print(f"B = {B:.0f}")   # B = 10658
 ```
 
 ## Testy
